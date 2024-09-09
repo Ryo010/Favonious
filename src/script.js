@@ -1,9 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
+
+
+document.addEventListener('DOMContentLoaded', async () => {
     const stopButton = document.getElementById('stopButton');
     const saveButton = document.getElementById('saveButton');
-    const editButton = document.getElementById('edit');
-    const deleteButton = document.getElementById('delete');
-    const translateButton = document.getElementById('translate');
+    const editTextButton = document.getElementById('editButton');
 
     if (!('webkitSpeechRecognition' in window)) {
         alert('Speech recognition not supported');
@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const startButton = document.getElementById('startButton');
     const outputDiv = document.getElementById('output');
+    const translateOP = document.getElementById('TranslateOP');
     const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
 
     recognition.interimResults = true;
@@ -25,13 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     recognition.onresult = event => {
-        const result = event.results[event.results.length - 1][0].transcript;
+        const result = event.results[0][0].transcript;
         outputDiv.textContent = result;
+        translateText(result);
     };
 
     recognition.onend = () => {
         startButton.disabled = false;
         startButton.textContent = 'Start Recording';
+        
     }
 
     recognition.onerror = event => {
@@ -42,56 +45,60 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('No speech was recognized.');
     };
 
-    stopButton.addEventListener('click', () => {
+    stopButton.addEventListener('click', async () => {
         recognition.stop();
         stopButton.disabled = true;
         startButton.disabled = false;
     });
 
     saveButton.addEventListener('click', () => {
-        var fileName = "myfile.txt";
-        var fileContent = result;
-        var myFile = new Blob([fileContent], {type: 'text/plain'});
-        alert('Saved')
-    });
-
-    editButton.addEventListener('click', () => {
-        const savedText = localStorage.getItem('savedText');
-        if (savedText) {
-            textOutput.value = savedText;
-        } else {
-            alert('No saved text found');
-        }
-    });
-
-    deleteButton.addEventListener('click', () => {
-        localStorage.removeItem('savedText');
-        textOutput.value = '';
-        alert('Saved text deleted');
-    });
-
-    translateButton.addEventListener('click', () => {
-        const text = textOutput.value;
+        const text = outputDiv.textContent;
         if (text) {
-            // Replace with your translation API endpoint and key
-            const apiUrl = 'https://api.example.com/translate';
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer YOUR_API_KEY' // replace with actual API key
-                },
-                body: JSON.stringify({ text, targetLanguage: 'es' }) // Example target language
-            })
-            .then(response => response.json())
-            .then(data => {
-                textOutput.value = data.translatedText;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        } else {
-            alert('No text to translate');
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'transcript.txt';
+            link.click();
         }
     });
+
+    editTextButton.addEventListener('click',()=>{
+        const text=outputDiv.textContent;
+        const newText=prompt('Edit Text:',text);
+        if (newText !== null){
+            outputDiv.textContent=newText;
+            translateText(newText);
+        }
+    })
+
+    async function translateText(text) {
+        const url = 'https://ai-translate.p.rapidapi.com/translate';
+        const options = {
+            method: 'POST',
+            headers: {
+                'x-rapidapi-key': 'bea6e032a5mshf5f5e8afd84cc62p14a183jsn735063acf0f7',
+                'x-rapidapi-host': 'ai-translate.p.rapidapi.com',
+                'Content-Type': 'application/json'
+            },
+            body: {
+                texts: [
+                    'hello. world!',
+                    '<b>hello. google!</b>',
+                    '<i>hello. AI Translate!</i>',
+                    '<notranslate class="notranslate">don\'t translate me!</notranslate>',
+                    '<!DOCTYPE html><html><head><title>AI Translate</title></head><body>hello. AI Translate!</body></html>'
+                ],
+                tl: 'zh',
+                sl: 'auto'
+            }
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const result = await response.text();
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 });

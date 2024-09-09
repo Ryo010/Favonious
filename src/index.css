@@ -5,7 +5,8 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-image: linear-gradient(to bottom right, #00c4cc, #0a1a44);
+  background-image: url(src/assets/bg_flowing.mp4);
+  background-position: center center;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -68,20 +69,23 @@ button:focus-visible {
 }
 
 .container {
+  margin-left: auto;
   margin-right: auto;
   text-align: center;
-  background-color:#ddd;
+  background-color:#00000000;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .title {
-  color: #000000;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: #ffffff;
   margin-bottom: 20px;
 }
 
 .recordButton {
-  background-color: #007bff;
+  margin-top: 20px;
+  background-color: #535151;
   color: white;
   border: none;
   border-radius: 4px;

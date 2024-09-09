@@ -1,0 +1,1 @@
+const translator = require("open-google-translator");
