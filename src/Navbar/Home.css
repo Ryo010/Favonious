@@ -1,0 +1,40 @@
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    background-color:#00000000;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+  
+.title {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+  
+.recordButton {
+    margin-top: 20px;
+    background-color: #535151;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+  
+.recordButton:hover {
+    background-color: #0056b3;
+}
+  
+.outputText {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #6a5e5ea7;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-height: 100px;
+    font-size: 18px;
+}
